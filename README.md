@@ -245,15 +245,3 @@ Delay trong TOTAL mode được cập nhật tự động mỗi `calibration-int
 
 ---
 
-## Build từ source
-
-```bash
-git clone <repo>
-cd ZirPinger
-mvn clean package
-# Output: target/ZirPinger-2.0.0.jar
-```
-
-Yêu cầu Maven 3.6+ và JDK 17+.
-
----
