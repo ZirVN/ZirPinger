@@ -4,7 +4,7 @@
 Tăng ping thật sự của người chơi thông qua Netty pipeline — tạo môi trường PvP công bằng giữa những người có ping chênh lệch nhau.
 
 > **Version:** 2.0.0  
-> **Author:** ZirVN — `dev.zirvn.zirpinger`  
+> **Author:** ZirVN 
 > **Server:** Paper / Spigot **1.21 – 1.21.8**  
 > **Java:** 17+  
 > **Depends:** [PacketEvents](https://modrinth.com/plugin/packetevents) 2.11.2+
@@ -114,10 +114,10 @@ Tự động cân bằng ping toàn server về một mức target. Áp dụng c
 
 | Player | Ping gốc | Delay thêm | Kết quả |
 |---|---|---|---|
-| Anh A | 25ms | +75ms | ~100ms ✅ |
-| Anh B | 45ms | +55ms | ~100ms ✅ |
-| Anh C | 65ms | +35ms | ~100ms ✅ |
-| Anh D | 120ms | 0ms | 120ms ⚠️ (không thể giảm) |
+| Anh A | 25ms | +75ms | ~100ms |
+| Anh B | 45ms | +55ms | ~100ms |
+| Anh C | 65ms | +35ms | ~100ms |
+| Anh D | 120ms | 0ms | 120ms (không thể giảm) |
 
 **Tolerance** (`/zpeq tolerance 10`): player có ping trong khoảng `90–110ms` sẽ không bị thêm delay — tránh dao động nhỏ gây inject/remove handler liên tục.
 
@@ -257,35 +257,3 @@ mvn clean package
 Yêu cầu Maven 3.6+ và JDK 17+.
 
 ---
-
-## Cấu trúc source
-
-```
-ZirPinger/
-├── pom.xml
-└── src/main/
-    ├── resources/
-    │   ├── plugin.yml       ← Khai báo plugin, commands, permissions
-    │   ├── config.yml       ← Cấu hình chính
-    │   └── messages.yml     ← Toàn bộ text hiển thị
-    └── java/dev/zirvn/zirpinger/
-        ├── ZirPinger.java                    ← Main class, PacketEvents lifecycle
-        ├── models/
-        │   ├── PlayerPingState.java          ← Trạng thái delay per-player (ADD/TOTAL/OFF)
-        │   └── PingGroup.java                ← Model cho preset group
-        ├── managers/
-        │   ├── PacketInterceptManager.java   ← Netty pipeline injection (core)
-        │   ├── DelayManager.java             ← Quản lý state, calibration, persistence
-        │   └── GlobalEqualizerManager.java   ← Logic cân bằng ping toàn server
-        ├── commands/
-        │   ├── ZirPingerCommand.java         ← /zp (hub chính)
-        │   ├── ZpSetCommand.java             ← /zpset
-        │   ├── ZpStatusCommand.java          ← /zpstatus
-        │   ├── ZpMeCommand.java              ← /zpme
-        │   └── ZpEqualizeCommand.java        ← /zpeq
-        ├── listeners/
-        │   └── PlayerConnectionListener.java ← Xử lý join/quit
-        └── config/
-            ├── ConfigManager.java            ← Đọc config.yml
-            └── MessagesManager.java          ← Đọc messages.yml, format placeholder
-```
