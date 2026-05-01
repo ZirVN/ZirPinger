@@ -1,12 +1,12 @@
 # ZirPinger
 
-**Server-side Ping Equalizer cho Minecraft**  
+**Server-side Ping Equalizer cho Minecraft**
 Tăng ping thật sự của người chơi thông qua Netty pipeline — tạo môi trường PvP công bằng giữa những người có ping chênh lệch nhau.
 
-> **Version:** 2.0.0  
-> **Author:** ZirVN 
-> **Server:** Paper / Spigot **1.21 – 1.21.8**  
-> **Java:** 17+  
+> **Version:** 2.0.0
+> **Author:** ZirVN
+> **Server:** Paper / Spigot **1.21 – 1.21.8**
+> **Java:** 17+
 > **Depends:** [PacketEvents](https://modrinth.com/plugin/packetevents) 2.11.2+
 
 ---
@@ -43,7 +43,7 @@ Channel được lấy qua **PacketEvents API** — không dùng reflection NMS 
 ## Lệnh
 
 ### `/zp` — Lệnh chính
-Alias: `/zirpinger`  
+Alias: `/zirpinger`
 Permission: `zirpinger.admin`
 
 | Lệnh | Mô tả |
@@ -93,7 +93,7 @@ Player tự xem trạng thái ping của mình. Hiển thị thêm ping Netty th
 ---
 
 ### `/zpeq` — Global Equalizer
-Alias: `/equalizer`, `/zpequalizer`  
+Alias: `/equalizer`, `/zpequalizer`
 Permission: `zirpinger.admin`
 
 Tự động cân bằng ping toàn server về một mức target. Áp dụng cho tất cả player hiện tại và mỗi người vào sau.
@@ -114,10 +114,10 @@ Tự động cân bằng ping toàn server về một mức target. Áp dụng c
 
 | Player | Ping gốc | Delay thêm | Kết quả |
 |---|---|---|---|
-| Anh A | 25ms | +75ms | ~100ms |
-| Anh B | 45ms | +55ms | ~100ms |
-| Anh C | 65ms | +35ms | ~100ms |
-| Anh D | 120ms | 0ms | 120ms (không thể giảm) |
+| Anh A | 25ms | +75ms | ~100ms ✅ |
+| Anh B | 45ms | +55ms | ~100ms ✅ |
+| Anh C | 65ms | +35ms | ~100ms ✅ |
+| Anh D | 120ms | 0ms | 120ms ⚠️ (không thể giảm) |
 
 **Tolerance** (`/zpeq tolerance 10`): player có ping trong khoảng `90–110ms` sẽ không bị thêm delay — tránh dao động nhỏ gây inject/remove handler liên tục.
 
@@ -229,19 +229,16 @@ Chỉnh xong, dùng `/zp reload` để áp dụng ngay mà không cần restart.
 ```
 delay áp dụng = addAmount  (luôn cố định, bất kể ping gốc thay đổi)
 ```
-Ping gốc 25ms, add 75ms → tổng ~100ms.  
-Ping gốc sau đó tăng lên 40ms, add vẫn là 75ms → tổng ~115ms.  
+Ping gốc 25ms, add 75ms → tổng ~100ms.
+Ping gốc sau đó tăng lên 40ms, add vẫn là 75ms → tổng ~115ms.
 → Dùng khi muốn thêm một lượng cố định, không quan tâm tổng là bao nhiêu.
 
 **TOTAL mode** — nhắm vào tổng:
 ```
 delay áp dụng = max(0, totalTarget - basePing)
 ```
-Ping gốc 25ms, target 100ms → delay = 75ms → tổng ~100ms.  
-Ping gốc sau đó tăng lên 40ms → delay tự điều chỉnh xuống 60ms → tổng vẫn ~100ms.  
+Ping gốc 25ms, target 100ms → delay = 75ms → tổng ~100ms.
+Ping gốc sau đó tăng lên 40ms → delay tự điều chỉnh xuống 60ms → tổng vẫn ~100ms.
 → Dùng khi muốn cố định tổng ping bất kể mạng người chơi biến động.
 
 Delay trong TOTAL mode được cập nhật tự động mỗi `calibration-interval` ticks bằng **EWMA smoothing** (tránh nhảy đột ngột).
-
----
-
